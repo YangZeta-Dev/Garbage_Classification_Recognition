@@ -28,7 +28,6 @@ import com.yaoliyun.system.mapper.SysUserMapper;
 import com.yaoliyun.system.mapper.SysUserPostMapper;
 import com.yaoliyun.system.mapper.SysUserRoleMapper;
 import com.yaoliyun.system.service.ISysConfigService;
-import com.yaoliyun.system.service.ISysDeptService;
 import com.yaoliyun.system.service.ISysUserService;
 
 /**
@@ -58,9 +57,6 @@ public class SysUserServiceImpl implements ISysUserService
 
     @Autowired
     private ISysConfigService configService;
-
-    @Autowired
-    private ISysDeptService deptService;
 
     @Autowired
     protected Validator validator;
@@ -514,7 +510,6 @@ public class SysUserServiceImpl implements ISysUserService
                 if (StringUtils.isNull(u))
                 {
                     BeanValidators.validateWithException(validator, user);
-                    deptService.checkDeptDataScope(user.getDeptId());
                     String password = configService.selectConfigByKey("sys.user.initPassword");
                     user.setPassword(SecurityUtils.encryptPassword(password));
                     user.setCreateBy(operName);
@@ -527,7 +522,6 @@ public class SysUserServiceImpl implements ISysUserService
                     BeanValidators.validateWithException(validator, user);
                     checkUserAllowed(u);
                     checkUserDataScope(u.getUserId());
-                    deptService.checkDeptDataScope(user.getDeptId());
                     user.setUserId(u.getUserId());
                     user.setUpdateBy(operName);
                     userMapper.updateUser(user);

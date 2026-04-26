@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yaoliyun.common.annotation.Log;
 import com.yaoliyun.common.core.controller.BaseController;
 import com.yaoliyun.common.core.domain.AjaxResult;
-import com.yaoliyun.common.core.domain.entity.SysDept;
 import com.yaoliyun.common.core.domain.entity.SysRole;
 import com.yaoliyun.common.core.domain.entity.SysUser;
 import com.yaoliyun.common.core.page.TableDataInfo;
@@ -27,7 +26,6 @@ import com.yaoliyun.common.enums.BusinessType;
 import com.yaoliyun.common.utils.SecurityUtils;
 import com.yaoliyun.common.utils.StringUtils;
 import com.yaoliyun.common.utils.poi.ExcelUtil;
-import com.yaoliyun.system.service.ISysDeptService;
 import com.yaoliyun.system.service.ISysPostService;
 import com.yaoliyun.system.service.ISysRoleService;
 import com.yaoliyun.system.service.ISysUserService;
@@ -46,9 +44,6 @@ public class SysUserController extends BaseController
 
     @Autowired
     private ISysRoleService roleService;
-
-    @Autowired
-    private ISysDeptService deptService;
 
     @Autowired
     private ISysPostService postService;
@@ -124,7 +119,6 @@ public class SysUserController extends BaseController
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysUser user)
     {
-        deptService.checkDeptDataScope(user.getDeptId());
         roleService.checkRoleDataScope(user.getRoleIds());
         if (!userService.checkUserNameUnique(user))
         {
@@ -153,7 +147,6 @@ public class SysUserController extends BaseController
     {
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getUserId());
-        deptService.checkDeptDataScope(user.getDeptId());
         roleService.checkRoleDataScope(user.getRoleIds());
         if (!userService.checkUserNameUnique(user))
         {
@@ -265,13 +258,4 @@ public class SysUserController extends BaseController
         return success();
     }
 
-    /**
-     * 获取部门树列表
-     */
-    @PreAuthorize("@ss.hasPermi('system:user:list')")
-    @GetMapping("/deptTree")
-    public AjaxResult deptTree(SysDept dept)
-    {
-        return success(deptService.selectDeptTreeList(dept));
-    }
 }

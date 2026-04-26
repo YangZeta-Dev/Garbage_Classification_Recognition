@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.GarbageCategoryMapper">
+    
+    <resultMap type="GarbageCategory" id="GarbageCategoryResult">
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="description"    column="description"    />
+        <result property="iconUrl"    column="icon_url"    />
+        <result property="colorCode"    column="color_code"    />
+        <result property="disposalGuidelines"    column="disposal_guidelines"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectGarbageCategoryVo">
+        select t.category_id, t.category_name, t.category_code, t.description, t.icon_url, t.color_code, t.disposal_guidelines, t.sort_order, t.status, t.create_by, t.create_time, t.update_by, t.update_time, t.remark
+        from garbage_category t
+    </sql>
+
+    <select id="selectGarbageCategoryList" parameterType="GarbageCategory" resultMap="GarbageCategoryResult">
+        <include refid="selectGarbageCategoryVo"/>
+        <where>  
+            <if test="categoryName != null  and categoryName != ''"> and t.category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and t.category_code = #{categoryCode}</if>
+            <if test="description != null  and description != ''"> and t.description = #{description}</if>
+            <if test="iconUrl != null  and iconUrl != ''"> and t.icon_url = #{iconUrl}</if>
+            <if test="colorCode != null  and colorCode != ''"> and t.color_code = #{colorCode}</if>
+            <if test="disposalGuidelines != null  and disposalGuidelines != ''"> and t.disposal_guidelines = #{disposalGuidelines}</if>
+            <if test="sortOrder != null "> and t.sort_order = #{sortOrder}</if>
+            <if test="status != null  and status != ''"> and t.status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarbageCategoryByCategoryId" parameterType="Long" resultMap="GarbageCategoryResult">
+        <include refid="selectGarbageCategoryVo"/>
+        where t.category_id = #{categoryId}
+    </select>
+
+    <insert id="insertGarbageCategory" parameterType="GarbageCategory" useGeneratedKeys="true" keyProperty="categoryId">
+        insert into garbage_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">category_name,</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code,</if>
+            <if test="description != null">description,</if>
+            <if test="iconUrl != null">icon_url,</if>
+            <if test="colorCode != null">color_code,</if>
+            <if test="disposalGuidelines != null">disposal_guidelines,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
+            <if test="categoryCode != null and categoryCode != ''">#{categoryCode},</if>
+            <if test="description != null">#{description},</if>
+            <if test="iconUrl != null">#{iconUrl},</if>
+            <if test="colorCode != null">#{colorCode},</if>
+            <if test="disposalGuidelines != null">#{disposalGuidelines},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarbageCategory" parameterType="GarbageCategory">
+        update garbage_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code = #{categoryCode},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="iconUrl != null">icon_url = #{iconUrl},</if>
+            <if test="colorCode != null">color_code = #{colorCode},</if>
+            <if test="disposalGuidelines != null">disposal_guidelines = #{disposalGuidelines},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where category_id = #{categoryId}
+    </update>
+
+    <delete id="deleteGarbageCategoryByCategoryId" parameterType="Long">
+        delete from garbage_category where category_id = #{categoryId}
+    </delete>
+
+    <delete id="deleteGarbageCategoryByCategoryIds" parameterType="String">
+        delete from garbage_category where category_id in 
+        <foreach item="categoryId" collection="array" open="(" separator="," close=")">
+            #{categoryId}
+        </foreach>
+    </delete>
+</mapper>

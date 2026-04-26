@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.GarbageRecognitionRecordMapper">
+    
+    <resultMap type="GarbageRecognitionRecord" id="GarbageRecognitionRecordResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="nickName"    column="nickName"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="thumbnailUrl"    column="thumbnail_url"    />
+        <result property="recognizedItemId"    column="recognized_item_id"    />
+        <result property="recognizedName"    column="recognized_name"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="categoryName"    />
+        <result property="confidenceScore"    column="confidence_score"    />
+        <result property="pointsEarned"    column="points_earned"    />
+        <result property="recognitionSource"    column="recognition_source"    />
+        <result property="recognitionTime"    column="recognition_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectGarbageRecognitionRecordVo">
+        select t.record_id, t.user_id, fk_userId.nick_name as nickName, t.image_url, t.thumbnail_url, t.recognized_item_id, t.recognized_name, t.category_id, fk_categoryId.category_name as categoryName, t.confidence_score, t.points_earned, t.recognition_source, t.recognition_time, t.del_flag, t.create_time
+        from garbage_recognition_record t
+        left join sys_user fk_userId on t.user_id = fk_userId.user_id
+        left join garbage_category fk_categoryId on t.category_id = fk_categoryId.category_id
+    </sql>
+
+    <select id="selectGarbageRecognitionRecordList" parameterType="GarbageRecognitionRecord" resultMap="GarbageRecognitionRecordResult">
+        <include refid="selectGarbageRecognitionRecordVo"/>
+        <where>  
+            <if test="userId != null "> and t.user_id = #{userId}</if>
+            <if test="imageUrl != null  and imageUrl != ''"> and t.image_url = #{imageUrl}</if>
+            <if test="thumbnailUrl != null  and thumbnailUrl != ''"> and t.thumbnail_url = #{thumbnailUrl}</if>
+            <if test="recognizedItemId != null "> and t.recognized_item_id = #{recognizedItemId}</if>
+            <if test="recognizedName != null  and recognizedName != ''"> and t.recognized_name like concat('%', #{recognizedName}, '%')</if>
+            <if test="categoryId != null "> and t.category_id = #{categoryId}</if>
+            <if test="confidenceScore != null "> and t.confidence_score = #{confidenceScore}</if>
+            <if test="pointsEarned != null "> and t.points_earned = #{pointsEarned}</if>
+            <if test="recognitionSource != null  and recognitionSource != ''"> and t.recognition_source = #{recognitionSource}</if>
+            <if test="recognitionTime != null "> and t.recognition_time = #{recognitionTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarbageRecognitionRecordByRecordId" parameterType="Long" resultMap="GarbageRecognitionRecordResult">
+        <include refid="selectGarbageRecognitionRecordVo"/>
+        where t.record_id = #{recordId}
+    </select>
+
+    <insert id="insertGarbageRecognitionRecord" parameterType="GarbageRecognitionRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into garbage_recognition_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="thumbnailUrl != null">thumbnail_url,</if>
+            <if test="recognizedItemId != null">recognized_item_id,</if>
+            <if test="recognizedName != null">recognized_name,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="confidenceScore != null">confidence_score,</if>
+            <if test="pointsEarned != null">points_earned,</if>
+            <if test="recognitionSource != null">recognition_source,</if>
+            <if test="recognitionTime != null">recognition_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="thumbnailUrl != null">#{thumbnailUrl},</if>
+            <if test="recognizedItemId != null">#{recognizedItemId},</if>
+            <if test="recognizedName != null">#{recognizedName},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="confidenceScore != null">#{confidenceScore},</if>
+            <if test="pointsEarned != null">#{pointsEarned},</if>
+            <if test="recognitionSource != null">#{recognitionSource},</if>
+            <if test="recognitionTime != null">#{recognitionTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarbageRecognitionRecord" parameterType="GarbageRecognitionRecord">
+        update garbage_recognition_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="thumbnailUrl != null">thumbnail_url = #{thumbnailUrl},</if>
+            <if test="recognizedItemId != null">recognized_item_id = #{recognizedItemId},</if>
+            <if test="recognizedName != null">recognized_name = #{recognizedName},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="confidenceScore != null">confidence_score = #{confidenceScore},</if>
+            <if test="pointsEarned != null">points_earned = #{pointsEarned},</if>
+            <if test="recognitionSource != null">recognition_source = #{recognitionSource},</if>
+            <if test="recognitionTime != null">recognition_time = #{recognitionTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteGarbageRecognitionRecordByRecordId" parameterType="Long">
+        delete from garbage_recognition_record where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteGarbageRecognitionRecordByRecordIds" parameterType="String">
+        delete from garbage_recognition_record where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+
+    <!-- 查询用户ID选项列表 -->
+    <select id="selectUserIdOptions" resultType="java.util.HashMap">
+        select 
+            user_id,
+            nick_name as nickName
+        from sys_user
+        order by user_id desc
+    </select>
+
+    <!-- 查询分类ID选项列表 -->
+    <select id="selectCategoryIdOptions" resultType="java.util.HashMap">
+        select 
+            category_id,
+            category_name as categoryName
+        from garbage_category
+        order by category_id desc
+    </select>
+</mapper>

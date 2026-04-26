@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.GarbageItemMapper">
+    
+    <resultMap type="GarbageItem" id="GarbageItemResult">
+        <result property="itemId"    column="item_id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="categoryName"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="itemNamePinyin"    column="item_name_pinyin"    />
+        <result property="disposalSuggestion"    column="disposal_suggestion"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="environmentalTips"    column="environmental_tips"    />
+        <result property="searchCount"    column="search_count"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGarbageItemVo">
+        select t.item_id, t.category_id, fk_categoryId.category_name as categoryName, t.item_name, t.item_name_pinyin, t.disposal_suggestion, t.image_url, t.environmental_tips, t.search_count, t.status, t.create_by, t.create_time, t.update_by, t.update_time
+        from garbage_item t
+        left join garbage_category fk_categoryId on t.category_id = fk_categoryId.category_id
+    </sql>
+
+    <select id="selectGarbageItemList" parameterType="GarbageItem" resultMap="GarbageItemResult">
+        <include refid="selectGarbageItemVo"/>
+        <where>  
+            <if test="categoryId != null "> and t.category_id = #{categoryId}</if>
+            <if test="itemName != null  and itemName != ''"> and t.item_name like concat('%', #{itemName}, '%')</if>
+            <if test="itemNamePinyin != null  and itemNamePinyin != ''"> and t.item_name_pinyin = #{itemNamePinyin}</if>
+            <if test="disposalSuggestion != null  and disposalSuggestion != ''"> and t.disposal_suggestion = #{disposalSuggestion}</if>
+            <if test="imageUrl != null  and imageUrl != ''"> and t.image_url = #{imageUrl}</if>
+            <if test="environmentalTips != null  and environmentalTips != ''"> and t.environmental_tips = #{environmentalTips}</if>
+            <if test="searchCount != null "> and t.search_count = #{searchCount}</if>
+            <if test="status != null  and status != ''"> and t.status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarbageItemByItemId" parameterType="Long" resultMap="GarbageItemResult">
+        <include refid="selectGarbageItemVo"/>
+        where t.item_id = #{itemId}
+    </select>
+
+    <insert id="insertGarbageItem" parameterType="GarbageItem" useGeneratedKeys="true" keyProperty="itemId">
+        insert into garbage_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="itemName != null and itemName != ''">item_name,</if>
+            <if test="itemNamePinyin != null">item_name_pinyin,</if>
+            <if test="disposalSuggestion != null">disposal_suggestion,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="environmentalTips != null">environmental_tips,</if>
+            <if test="searchCount != null">search_count,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="itemName != null and itemName != ''">#{itemName},</if>
+            <if test="itemNamePinyin != null">#{itemNamePinyin},</if>
+            <if test="disposalSuggestion != null">#{disposalSuggestion},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="environmentalTips != null">#{environmentalTips},</if>
+            <if test="searchCount != null">#{searchCount},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarbageItem" parameterType="GarbageItem">
+        update garbage_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="itemName != null and itemName != ''">item_name = #{itemName},</if>
+            <if test="itemNamePinyin != null">item_name_pinyin = #{itemNamePinyin},</if>
+            <if test="disposalSuggestion != null">disposal_suggestion = #{disposalSuggestion},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="environmentalTips != null">environmental_tips = #{environmentalTips},</if>
+            <if test="searchCount != null">search_count = #{searchCount},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where item_id = #{itemId}
+    </update>
+
+    <delete id="deleteGarbageItemByItemId" parameterType="Long">
+        delete from garbage_item where item_id = #{itemId}
+    </delete>
+
+    <delete id="deleteGarbageItemByItemIds" parameterType="String">
+        delete from garbage_item where item_id in 
+        <foreach item="itemId" collection="array" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </delete>
+
+    <!-- 查询所属类别ID（关联垃圾分类类别表）选项列表 -->
+    <select id="selectCategoryIdOptions" resultType="java.util.HashMap">
+        select 
+            category_id,
+            category_name as categoryName
+        from garbage_category
+        order by category_id desc
+    </select>
+</mapper>

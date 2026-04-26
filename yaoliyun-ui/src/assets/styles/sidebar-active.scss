@@ -1,0 +1,88 @@
+// 侧边栏激活状态样式优化
+.sidebar-container {
+  // 激活菜单项样式
+  .el-menu-item.is-active {
+    background: linear-gradient(
+      90deg, 
+      rgba(59, 130, 246, 0.15) 0%, 
+      rgba(59, 130, 246, 0.08) 50%,
+      rgba(59, 130, 246, 0.05) 100%
+    ) !important;
+    color: #3b82f6 !important;
+    font-weight: 600;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 24px;
+      background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%);
+      border-radius: 0 2px 2px 0;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+    }
+
+    .svg-icon {
+      color: #3b82f6 !important;
+    }
+  }
+
+  // 深色主题激活样式
+  .theme-dark {
+    .el-menu-item.is-active {
+      background: linear-gradient(90deg, rgba(96, 165, 250, 0.15) 0%, rgba(96, 165, 250, 0.05) 100%) !important;
+      color: #60a5fa !important;
+      
+      &::before {
+        background: #60a5fa;
+      }
+
+      .svg-icon {
+        color: #60a5fa !important;
+      }
+    }
+  }
+
+  // 子菜单激活样式
+  .el-submenu.is-active > .el-submenu__title {
+    color: #3b82f6 !important;
+    font-weight: 600;
+
+    .svg-icon {
+      color: #3b82f6 !important;
+    }
+  }
+
+  // 图标样式优化
+  .svg-icon {
+    font-size: 18px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  }
+
+  // 菜单文字样式
+  .el-menu-item,
+  .el-submenu__title {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    will-change: transform, background-color;
+  }
+
+  // 展开图标样式
+  .el-submenu__icon-arrow {
+    font-weight: bold;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 12px;
+  }
+
+  // 激活菜单项的图标发光效果
+  .el-menu-item.is-active .svg-icon {
+    filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.5));
+  }
+}
+

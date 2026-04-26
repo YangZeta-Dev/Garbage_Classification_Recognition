@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.GarbageKnowledgeArticleMapper">
+    
+    <resultMap type="GarbageKnowledgeArticle" id="GarbageKnowledgeArticleResult">
+        <result property="articleId"    column="article_id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="categoryName"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="coverImage"    column="cover_image"    />
+        <result property="viewCount"    column="view_count"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGarbageKnowledgeArticleVo">
+        select t.article_id, t.category_id, fk_categoryId.category_name as categoryName, t.title, t.content, t.cover_image, t.view_count, t.sort_order, t.status, t.create_by, t.create_time, t.update_by, t.update_time
+        from garbage_knowledge_article t
+        left join garbage_category fk_categoryId on t.category_id = fk_categoryId.category_id
+    </sql>
+
+    <select id="selectGarbageKnowledgeArticleList" parameterType="GarbageKnowledgeArticle" resultMap="GarbageKnowledgeArticleResult">
+        <include refid="selectGarbageKnowledgeArticleVo"/>
+        <where>  
+            <if test="categoryId != null "> and t.category_id = #{categoryId}</if>
+            <if test="title != null  and title != ''"> and t.title like concat('%', #{title}, '%')</if>
+            <if test="content != null  and content != ''"> and t.content = #{content}</if>
+            <if test="coverImage != null  and coverImage != ''"> and t.cover_image = #{coverImage}</if>
+            <if test="viewCount != null "> and t.view_count = #{viewCount}</if>
+            <if test="sortOrder != null "> and t.sort_order = #{sortOrder}</if>
+            <if test="status != null  and status != ''"> and t.status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarbageKnowledgeArticleByArticleId" parameterType="Long" resultMap="GarbageKnowledgeArticleResult">
+        <include refid="selectGarbageKnowledgeArticleVo"/>
+        where t.article_id = #{articleId}
+    </select>
+
+    <insert id="insertGarbageKnowledgeArticle" parameterType="GarbageKnowledgeArticle" useGeneratedKeys="true" keyProperty="articleId">
+        insert into garbage_knowledge_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null">content,</if>
+            <if test="coverImage != null">cover_image,</if>
+            <if test="viewCount != null">view_count,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="coverImage != null">#{coverImage},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarbageKnowledgeArticle" parameterType="GarbageKnowledgeArticle">
+        update garbage_knowledge_article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="coverImage != null">cover_image = #{coverImage},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where article_id = #{articleId}
+    </update>
+
+    <delete id="deleteGarbageKnowledgeArticleByArticleId" parameterType="Long">
+        delete from garbage_knowledge_article where article_id = #{articleId}
+    </delete>
+
+    <delete id="deleteGarbageKnowledgeArticleByArticleIds" parameterType="String">
+        delete from garbage_knowledge_article where article_id in 
+        <foreach item="articleId" collection="array" open="(" separator="," close=")">
+            #{articleId}
+        </foreach>
+    </delete>
+
+    <!-- 查询关联分类ID选项列表 -->
+    <select id="selectCategoryIdOptions" resultType="java.util.HashMap">
+        select 
+            category_id,
+            category_name as categoryName
+        from garbage_category
+        order by category_id desc
+    </select>
+
+    <!-- 增加文章浏览量 -->
+    <update id="incrementViewCount" parameterType="Long">
+        update garbage_knowledge_article 
+        set view_count = IFNULL(view_count, 0) + 1 
+        where article_id = #{articleId}
+    </update>
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.SysPageTemplateMapper">
+    
+    <resultMap type="SysPageTemplate" id="SysPageTemplateResult">
+        <result property="templateId"    column="template_id"    />
+        <result property="templateName"    column="template_name"    />
+        <result property="templateType"    column="template_type"    />
+        <result property="templateDescription"    column="template_description"    />
+        <result property="previewImage"    column="preview_image"    />
+        <result property="templateCode"    column="template_code"    />
+        <result property="category"    column="category"    />
+        <result property="tags"    column="tags"    />
+        <result property="downloadCount"    column="download_count"    />
+        <result property="status"    column="status"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysPageTemplateVo">
+        select template_id, template_name, template_type, template_description, preview_image, template_code, category, tags, download_count, status, sort_order, create_by, create_time, update_by, update_time, remark from sys_page_template
+    </sql>
+
+    <select id="selectSysPageTemplateList" parameterType="SysPageTemplate" resultMap="SysPageTemplateResult">
+        <include refid="selectSysPageTemplateVo"/>
+        <where>  
+            <if test="templateName != null  and templateName != ''"> and template_name like concat('%', #{templateName}, '%')</if>
+            <if test="templateType != null  and templateType != ''"> and template_type = #{templateType}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by sort_order asc, create_time desc
+    </select>
+    
+    <select id="selectSysPageTemplateByTemplateId" parameterType="Long" resultMap="SysPageTemplateResult">
+        <include refid="selectSysPageTemplateVo"/>
+        where template_id = #{templateId}
+    </select>
+
+    <select id="selectPopularTemplates" parameterType="int" resultMap="SysPageTemplateResult">
+        <include refid="selectSysPageTemplateVo"/>
+        where status = '0'
+        order by download_count desc, create_time desc
+        limit #{limit}
+    </select>
+
+    <select id="selectTemplatesByCategory" parameterType="String" resultMap="SysPageTemplateResult">
+        <include refid="selectSysPageTemplateVo"/>
+        where category = #{category} and status = '0'
+        order by sort_order asc, create_time desc
+    </select>
+
+    <select id="selectTemplatesByType" parameterType="String" resultMap="SysPageTemplateResult">
+        <include refid="selectSysPageTemplateVo"/>
+        where template_type = #{templateType} and status = '0'
+        order by sort_order asc, create_time desc
+    </select>
+        
+    <insert id="insertSysPageTemplate" parameterType="SysPageTemplate" useGeneratedKeys="true" keyProperty="templateId">
+        insert into sys_page_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="templateName != null and templateName != ''">template_name,</if>
+            <if test="templateType != null and templateType != ''">template_type,</if>
+            <if test="templateDescription != null">template_description,</if>
+            <if test="previewImage != null">preview_image,</if>
+            <if test="templateCode != null and templateCode != ''">template_code,</if>
+            <if test="category != null">category,</if>
+            <if test="tags != null">tags,</if>
+            <if test="downloadCount != null">download_count,</if>
+            <if test="status != null">status,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="templateName != null and templateName != ''">#{templateName},</if>
+            <if test="templateType != null and templateType != ''">#{templateType},</if>
+            <if test="templateDescription != null">#{templateDescription},</if>
+            <if test="previewImage != null">#{previewImage},</if>
+            <if test="templateCode != null and templateCode != ''">#{templateCode},</if>
+            <if test="category != null">#{category},</if>
+            <if test="tags != null">#{tags},</if>
+            <if test="downloadCount != null">#{downloadCount},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateSysPageTemplate" parameterType="SysPageTemplate">
+        update sys_page_template
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templateName != null and templateName != ''">template_name = #{templateName},</if>
+            <if test="templateType != null and templateType != ''">template_type = #{templateType},</if>
+            <if test="templateDescription != null">template_description = #{templateDescription},</if>
+            <if test="previewImage != null">preview_image = #{previewImage},</if>
+            <if test="templateCode != null and templateCode != ''">template_code = #{templateCode},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="downloadCount != null">download_count = #{downloadCount},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where template_id = #{templateId}
+    </update>
+
+    <delete id="deleteSysPageTemplateByTemplateId" parameterType="Long">
+        delete from sys_page_template where template_id = #{templateId}
+    </delete>
+
+    <delete id="deleteSysPageTemplateByTemplateIds" parameterType="String">
+        delete from sys_page_template where template_id in 
+        <foreach item="templateId" collection="array" open="(" separator="," close=")">
+            #{templateId}
+        </foreach>
+    </delete>
+
+    <update id="incrementDownloadCount" parameterType="Long">
+        update sys_page_template set download_count = download_count + 1 where template_id = #{templateId}
+    </update>
+</mapper> 

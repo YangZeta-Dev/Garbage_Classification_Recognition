@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.SysUniappPageMapper">
+    
+    <resultMap type="SysUniappPage" id="SysUniappPageResult">
+        <result property="pageId"           column="page_id"           />
+        <result property="pagePath"         column="page_path"         />
+        <result property="pageTitle"        column="page_title"        />
+        <result property="navigationStyle"  column="navigation_style"  />
+        <result property="status"           column="status"            />
+        <result property="isTabbar"         column="is_tabbar"         />
+        <result property="tabbarText"       column="tabbar_text"       />
+        <result property="tabbarOrder"      column="tabbar_order"      />
+        <result property="tabbarSelectedIcon" column="tabbar_selected_icon" />
+        <result property="tabbarIconPath"   column="tabbar_icon_path"  />
+        <result property="description"      column="description"       />
+        <result property="createBy"         column="create_by"         />
+        <result property="createTime"       column="create_time"       />
+        <result property="updateBy"         column="update_by"         />
+        <result property="updateTime"       column="update_time"       />
+    </resultMap>
+
+    <sql id="selectSysUniappPageVo">
+        select page_id, page_path, page_title, navigation_style, status, is_tabbar, tabbar_text, tabbar_order, tabbar_selected_icon, tabbar_icon_path, description, create_by, create_time, update_by, update_time from sys_uniapp_page
+    </sql>
+
+    <select id="selectSysUniappPageList" parameterType="SysUniappPage" resultMap="SysUniappPageResult">
+        <include refid="selectSysUniappPageVo"/>
+        <where>  
+            <if test="pagePath != null  and pagePath != ''"> and page_path like concat('%', #{pagePath}, '%')</if>
+            <if test="pageTitle != null  and pageTitle != ''"> and page_title like concat('%', #{pageTitle}, '%')</if>
+            <if test="navigationStyle != null  and navigationStyle != ''"> and navigation_style = #{navigationStyle}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="isTabbar != null  and isTabbar != ''"> and is_tabbar = #{isTabbar}</if>
+            <if test="tabbarText != null  and tabbarText != ''"> and tabbar_text like concat('%', #{tabbarText}, '%')</if>
+        </where>
+        order by 
+        case when is_tabbar = '1' then tabbar_order else 999 end asc,
+        create_time desc
+    </select>
+    
+    <select id="selectSysUniappPageByPageId" parameterType="Long" resultMap="SysUniappPageResult">
+        <include refid="selectSysUniappPageVo"/>
+        where page_id = #{pageId}
+    </select>
+
+    <select id="selectSysUniappPageByPath" parameterType="String" resultMap="SysUniappPageResult">
+        <include refid="selectSysUniappPageVo"/>
+        where page_path = #{pagePath}
+    </select>
+        
+    <insert id="insertSysUniappPage" parameterType="SysUniappPage" useGeneratedKeys="true" keyProperty="pageId">
+        insert into sys_uniapp_page
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pagePath != null and pagePath != ''">page_path,</if>
+            <if test="pageTitle != null and pageTitle != ''">page_title,</if>
+            <if test="navigationStyle != null and navigationStyle != ''">navigation_style,</if>
+            <if test="status != null">status,</if>
+            <if test="isTabbar != null">is_tabbar,</if>
+            <if test="tabbarText != null">tabbar_text,</if>
+            <if test="tabbarOrder != null">tabbar_order,</if>
+            <if test="tabbarSelectedIcon != null">tabbar_selected_icon,</if>
+            <if test="tabbarIconPath != null">tabbar_icon_path,</if>
+            <if test="description != null">description,</if>
+            <if test="createBy != null">create_by,</if>
+            create_time
+         </trim>
+         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pagePath != null and pagePath != ''">#{pagePath},</if>
+            <if test="pageTitle != null and pageTitle != ''">#{pageTitle},</if>
+            <if test="navigationStyle != null and navigationStyle != ''">#{navigationStyle},</if>
+            <if test="status != null">#{status},</if>
+            <if test="isTabbar != null">#{isTabbar},</if>
+            <if test="tabbarText != null">#{tabbarText},</if>
+            <if test="tabbarOrder != null">#{tabbarOrder},</if>
+            <if test="tabbarSelectedIcon != null">#{tabbarSelectedIcon},</if>
+            <if test="tabbarIconPath != null">#{tabbarIconPath},</if>
+            <if test="description != null">#{description},</if>
+            <if test="createBy != null">#{createBy},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateSysUniappPage" parameterType="SysUniappPage">
+        update sys_uniapp_page
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pagePath != null and pagePath != ''">page_path = #{pagePath},</if>
+            <if test="pageTitle != null and pageTitle != ''">page_title = #{pageTitle},</if>
+            <if test="navigationStyle != null and navigationStyle != ''">navigation_style = #{navigationStyle},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isTabbar != null">is_tabbar = #{isTabbar},</if>
+            <if test="tabbarText != null">tabbar_text = #{tabbarText},</if>
+            <if test="tabbarOrder != null">tabbar_order = #{tabbarOrder},</if>
+            <if test="tabbarSelectedIcon != null">tabbar_selected_icon = #{tabbarSelectedIcon},</if>
+            <if test="tabbarIconPath != null">tabbar_icon_path = #{tabbarIconPath},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </trim>
+        where page_id = #{pageId}
+    </update>
+
+    <delete id="deleteSysUniappPageByPageId" parameterType="Long">
+        delete from sys_uniapp_page where page_id = #{pageId}
+    </delete>
+
+    <delete id="deleteSysUniappPageByPageIds" parameterType="String">
+        delete from sys_uniapp_page where page_id in 
+        <foreach item="pageId" collection="array" open="(" separator="," close=")">
+            #{pageId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysUniappPageByPath" parameterType="String">
+        delete from sys_uniapp_page where page_path = #{pagePath}
+    </delete>
+
+    <!-- 查询TabBar页面列表，按排序字段排序 -->
+    <select id="selectTabbarPagesList" resultMap="SysUniappPageResult">
+        <include refid="selectSysUniappPageVo"/>
+        where is_tabbar = '1' and status = '0'
+        order by tabbar_order asc, create_time asc
+    </select>
+</mapper> 

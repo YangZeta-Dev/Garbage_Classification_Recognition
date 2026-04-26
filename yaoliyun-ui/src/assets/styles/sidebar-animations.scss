@@ -1,0 +1,316 @@
+// 侧边栏动画效果增强
+
+// 菜单项淡入动画
+@keyframes menuItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// 菜单项弹跳效果（已禁用，不移动菜单）
+
+// 图标脉冲动画
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+// 激活指示条滑入动画
+@keyframes activeBarSlide {
+  from {
+    transform: translateY(-50%) scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-50%) scaleY(1);
+    opacity: 1;
+  }
+}
+
+// 背景渐变动画
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// Logo 发光效果
+@keyframes logoGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
+  }
+}
+
+// 文字闪烁效果
+@keyframes textShimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.sidebar-container {
+  // 菜单项加载动画
+  .el-menu-item,
+  .el-submenu {
+    animation: menuItemFadeIn 0.4s ease-out backwards;
+    
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.05}s;
+      }
+    }
+  }
+
+  // 激活菜单项的额外动画
+  .el-menu-item.is-active {
+    animation: menuItemFadeIn 0.4s ease-out;
+    
+    &::before {
+      animation: activeBarSlide 0.3s ease-out;
+    }
+
+    // 图标脉冲效果
+    .svg-icon {
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+  }
+
+  // 悬停效果（已移除弹跳动画）
+
+  // 展开/收起动画优化
+  .el-submenu__title {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    .el-submenu__icon-arrow {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  .el-submenu.is-opened {
+    > .el-submenu__title {
+      .el-submenu__icon-arrow {
+        transform: rotateZ(180deg);
+      }
+    }
+  }
+
+  // 图标悬停效果已在其他地方定义（缩放）
+
+  // 滚动条动画
+  .el-scrollbar__thumb {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scaleX(1.5);
+    }
+  }
+}
+
+// Logo 容器动画
+.sidebar-logo-container {
+  overflow: visible;
+  
+  .sidebar-logo-link {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      transform: translateY(-3px) scale(1.02);
+      
+      .sidebar-logo {
+        animation: logoGlow 2s ease-in-out infinite;
+        transform: scale(1.1);
+      }
+
+      .sidebar-title {
+        background: linear-gradient(
+          90deg,
+          #ffffff 0%,
+          #60a5fa 50%,
+          #ffffff 100%
+        );
+        background-size: 200% 100%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textShimmer 2s linear infinite;
+      }
+    }
+  }
+
+  .sidebar-logo {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// 收起状态的特殊动画
+.hideSidebar {
+  .sidebar-container {
+    .el-menu-item,
+    .el-submenu__title {
+      &:hover {
+        transform: translateX(0) !important;
+        
+        .svg-icon {
+          animation: iconPulse 0.6s ease;
+        }
+      }
+    }
+  }
+}
+
+// 移动端动画
+.mobile {
+  .sidebar-container {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.hideSidebar {
+    .sidebar-container {
+      animation: slideOut 0.3s ease-out;
+    }
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(-100%, 0, 0);
+    opacity: 0.5;
+  }
+}
+
+// 子菜单展开动画
+.el-menu--inline {
+  .el-menu-item {
+    animation: menuItemFadeIn 0.3s ease-out backwards;
+    
+    @for $i from 1 through 10 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.03}s;
+      }
+    }
+  }
+}
+
+// 激活状态渐变背景动画
+.el-menu-item.is-active {
+  background-size: 200% 100% !important;
+  animation: gradientShift 3s ease infinite !important;
+}
+
+// 增强过渡效果
+.sidebar-container {
+  * {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// 菜单项激活时的涟漪效果
+@keyframes ripple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+}
+
+.el-menu-item.is-active {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    animation: ripple 1.5s ease-out infinite;
+  }
+}
+
+// 悬停时的光晕效果
+.el-menu-item,
+.el-submenu__title {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+  
+  &:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+// Logo 进入动画
+.sidebar-logo-container {
+  animation: logoFadeIn 0.6s ease-out;
+}
+
+@keyframes logoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 滚动条出现动画
+.el-scrollbar__bar {
+  transition: opacity 0.3s ease;
+  
+  &.is-vertical {
+    animation: scrollbarFadeIn 0.5s ease-out;
+  }
+}
+
+@keyframes scrollbarFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+

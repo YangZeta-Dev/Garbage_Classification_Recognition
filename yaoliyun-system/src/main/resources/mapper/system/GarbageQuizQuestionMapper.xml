@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.GarbageQuizQuestionMapper">
+    
+    <resultMap type="GarbageQuizQuestion" id="GarbageQuizQuestionResult">
+        <result property="questionId"    column="question_id"    />
+        <result property="articleId"    column="article_id"    />
+        <result property="title"    column="title"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="categoryName"    />
+        <result property="questionContent"    column="question_content"    />
+        <result property="optionA"    column="option_a"    />
+        <result property="optionB"    column="option_b"    />
+        <result property="optionC"    column="option_c"    />
+        <result property="optionD"    column="option_d"    />
+        <result property="correctAnswer"    column="correct_answer"    />
+        <result property="explanation"    column="explanation"    />
+        <result property="pointsValue"    column="points_value"    />
+        <result property="difficulty"    column="difficulty"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGarbageQuizQuestionVo">
+        select t.question_id, t.article_id, fk_articleId.title as title, t.category_id, fk_categoryId.category_name as categoryName, t.question_content, t.option_a, t.option_b, t.option_c, t.option_d, t.correct_answer, t.explanation, t.points_value, t.difficulty, t.status, t.create_by, t.create_time, t.update_by, t.update_time
+        from garbage_quiz_question t
+        left join garbage_knowledge_article fk_articleId on t.article_id = fk_articleId.article_id
+        left join garbage_category fk_categoryId on t.category_id = fk_categoryId.category_id
+    </sql>
+
+    <select id="selectGarbageQuizQuestionList" parameterType="GarbageQuizQuestion" resultMap="GarbageQuizQuestionResult">
+        <include refid="selectGarbageQuizQuestionVo"/>
+        <where>  
+            <if test="articleId != null "> and t.article_id = #{articleId}</if>
+            <if test="categoryId != null "> and t.category_id = #{categoryId}</if>
+            <if test="questionContent != null  and questionContent != ''"> and t.question_content = #{questionContent}</if>
+            <if test="optionA != null  and optionA != ''"> and t.option_a = #{optionA}</if>
+            <if test="optionB != null  and optionB != ''"> and t.option_b = #{optionB}</if>
+            <if test="optionC != null  and optionC != ''"> and t.option_c = #{optionC}</if>
+            <if test="optionD != null  and optionD != ''"> and t.option_d = #{optionD}</if>
+            <if test="correctAnswer != null  and correctAnswer != ''"> and t.correct_answer = #{correctAnswer}</if>
+            <if test="explanation != null  and explanation != ''"> and t.explanation = #{explanation}</if>
+            <if test="pointsValue != null "> and t.points_value = #{pointsValue}</if>
+            <if test="difficulty != null "> and t.difficulty = #{difficulty}</if>
+            <if test="status != null  and status != ''"> and t.status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarbageQuizQuestionByQuestionId" parameterType="Long" resultMap="GarbageQuizQuestionResult">
+        <include refid="selectGarbageQuizQuestionVo"/>
+        where t.question_id = #{questionId}
+    </select>
+
+    <insert id="insertGarbageQuizQuestion" parameterType="GarbageQuizQuestion" useGeneratedKeys="true" keyProperty="questionId">
+        insert into garbage_quiz_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">article_id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="questionContent != null and questionContent != ''">question_content,</if>
+            <if test="optionA != null and optionA != ''">option_a,</if>
+            <if test="optionB != null and optionB != ''">option_b,</if>
+            <if test="optionC != null">option_c,</if>
+            <if test="optionD != null">option_d,</if>
+            <if test="correctAnswer != null and correctAnswer != ''">correct_answer,</if>
+            <if test="explanation != null">explanation,</if>
+            <if test="pointsValue != null">points_value,</if>
+            <if test="difficulty != null">difficulty,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">#{articleId},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="questionContent != null and questionContent != ''">#{questionContent},</if>
+            <if test="optionA != null and optionA != ''">#{optionA},</if>
+            <if test="optionB != null and optionB != ''">#{optionB},</if>
+            <if test="optionC != null">#{optionC},</if>
+            <if test="optionD != null">#{optionD},</if>
+            <if test="correctAnswer != null and correctAnswer != ''">#{correctAnswer},</if>
+            <if test="explanation != null">#{explanation},</if>
+            <if test="pointsValue != null">#{pointsValue},</if>
+            <if test="difficulty != null">#{difficulty},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarbageQuizQuestion" parameterType="GarbageQuizQuestion">
+        update garbage_quiz_question
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="articleId != null">article_id = #{articleId},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="questionContent != null and questionContent != ''">question_content = #{questionContent},</if>
+            <if test="optionA != null and optionA != ''">option_a = #{optionA},</if>
+            <if test="optionB != null and optionB != ''">option_b = #{optionB},</if>
+            <if test="optionC != null">option_c = #{optionC},</if>
+            <if test="optionD != null">option_d = #{optionD},</if>
+            <if test="correctAnswer != null and correctAnswer != ''">correct_answer = #{correctAnswer},</if>
+            <if test="explanation != null">explanation = #{explanation},</if>
+            <if test="pointsValue != null">points_value = #{pointsValue},</if>
+            <if test="difficulty != null">difficulty = #{difficulty},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where question_id = #{questionId}
+    </update>
+
+    <delete id="deleteGarbageQuizQuestionByQuestionId" parameterType="Long">
+        delete from garbage_quiz_question where question_id = #{questionId}
+    </delete>
+
+    <delete id="deleteGarbageQuizQuestionByQuestionIds" parameterType="String">
+        delete from garbage_quiz_question where question_id in 
+        <foreach item="questionId" collection="array" open="(" separator="," close=")">
+            #{questionId}
+        </foreach>
+    </delete>
+
+    <!-- 查询关联文章ID选项列表 -->
+    <select id="selectArticleIdOptions" resultType="java.util.HashMap">
+        select 
+            article_id,
+            title as title
+        from garbage_knowledge_article
+        order by article_id desc
+    </select>
+
+    <!-- 查询关联分类ID选项列表 -->
+    <select id="selectCategoryIdOptions" resultType="java.util.HashMap">
+        select 
+            category_id,
+            category_name as categoryName
+        from garbage_category
+        order by category_id desc
+    </select>
+</mapper>

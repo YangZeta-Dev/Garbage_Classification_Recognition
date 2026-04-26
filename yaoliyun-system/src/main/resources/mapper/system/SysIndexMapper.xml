@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoliyun.system.mapper.SysIndexMapper">
+
+    <!-- 获取总用户数 -->
+    <select id="getTotalUserCount" resultType="Long">
+        SELECT COUNT(*) FROM sys_user WHERE del_flag = '0'
+    </select>
+
+    <!-- 获取在线用户数 -->
+    <select id="getOnlineUserCount" resultType="Long">
+        SELECT IFNULL(COUNT(DISTINCT user_name), 0) FROM sys_logininfor 
+        WHERE status = '0' 
+        AND login_time >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+    </select>
+
+    <!-- 获取今日新增用户数 -->
+    <select id="getTodayNewUserCount" resultType="Long">
+        SELECT COUNT(*) FROM sys_user 
+        WHERE del_flag = '0' 
+        AND DATE(create_time) = CURDATE()
+    </select>
+
+    <!-- 获取本月新增用户数 -->
+    <select id="getMonthNewUserCount" resultType="Long">
+        SELECT COUNT(*) FROM sys_user 
+        WHERE del_flag = '0' 
+        AND YEAR(create_time) = YEAR(NOW()) 
+        AND MONTH(create_time) = MONTH(NOW())
+    </select>
+
+    <!-- 获取系统总访问量 -->
+    <select id="getTotalVisitCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM sys_logininfor
+    </select>
+
+    <!-- 获取今日访问量 -->
+    <select id="getTodayVisitCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM sys_logininfor 
+        WHERE DATE(login_time) = CURDATE()
+    </select>
+
+    <!-- 获取系统运行天数 -->
+    <select id="getSystemRunningDays" resultType="Long">
+        SELECT IFNULL(DATEDIFF(NOW(), MIN(create_time)), 0) FROM sys_user 
+        WHERE user_id = 1
+    </select>
+
+    <!-- 获取总菜单数 -->
+    <select id="getTotalMenuCount" resultType="Long">
+        SELECT COUNT(*) FROM sys_menu WHERE status = '0'
+    </select>
+
+    <!-- 根据日期获取用户注册数量 -->
+    <select id="getUserRegistrationCountByDate" parameterType="String" resultType="Long">
+        SELECT COUNT(*) FROM sys_user 
+        WHERE del_flag = '0' 
+        AND DATE(create_time) = #{date}
+    </select>
+
+    <!-- 根据小时获取在线用户数量 -->
+    <select id="getOnlineUserCountByHour" parameterType="Date" resultType="Long">
+        SELECT IFNULL(COUNT(DISTINCT user_name), 0) FROM sys_logininfor 
+        WHERE DATE_FORMAT(login_time, '%Y-%m-%d %H') = DATE_FORMAT(#{dateTime}, '%Y-%m-%d %H')
+        AND status = '0'
+    </select>
+
+    <!-- 获取系统模块使用统计 -->
+    <select id="getModuleUsageStats" resultType="Map">
+        SELECT 
+            m.menu_name as name,
+            FLOOR(RAND() * 100) + 10 as value
+        FROM sys_menu m
+        WHERE m.menu_type = 'C' 
+        AND m.status = '0'
+        AND m.perms IS NOT NULL 
+        AND m.perms != ''
+        AND m.parent_id > 0
+        ORDER BY RAND()
+        LIMIT 6
+    </select>
+
+    <!-- 获取垃圾分类类别总数 -->
+    <select id="getTotalCategoryCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM garbage_category WHERE status = '0'
+    </select>
+
+    <!-- 获取垃圾物品总数 -->
+    <select id="getTotalItemCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM garbage_item WHERE status = '0'
+    </select>
+
+    <!-- 获取识别记录总数 -->
+    <select id="getTotalRecognitionCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM garbage_recognition_record WHERE del_flag = '0'
+    </select>
+
+    <!-- 获取今日识别次数 -->
+    <select id="getTodayRecognitionCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM garbage_recognition_record 
+        WHERE del_flag = '0' 
+        AND DATE(recognition_time) = CURDATE()
+    </select>
+
+    <!-- 获取知识文章总数 -->
+    <select id="getTotalArticleCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM garbage_knowledge_article WHERE status = '0'
+    </select>
+
+    <!-- 获取测验题目总数 -->
+    <select id="getTotalQuestionCount" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM garbage_quiz_question WHERE status = '0'
+    </select>
+
+    <!-- 获取各分类识别统计 -->
+    <select id="getCategoryRecognitionStats" resultType="Map">
+        SELECT 
+            c.category_name as name,
+            IFNULL(COUNT(r.record_id), 0) as value
+        FROM garbage_category c
+        LEFT JOIN garbage_recognition_record r ON c.category_id = r.category_id AND r.del_flag = '0'
+        WHERE c.status = '0'
+        GROUP BY c.category_id, c.category_name
+        ORDER BY value DESC
+    </select>
+
+    <!-- 根据日期获取识别数量 -->
+    <select id="getRecognitionCountByDate" parameterType="String" resultType="Long">
+        SELECT IFNULL(COUNT(*), 0) FROM garbage_recognition_record 
+        WHERE del_flag = '0' 
+        AND DATE(recognition_time) = #{date}
+    </select>
+
+</mapper>

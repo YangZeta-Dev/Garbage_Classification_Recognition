@@ -1,0 +1,237 @@
+// 侧边栏微动画效果 - 精细优化
+
+// 页面加载时侧边栏滑入
+.sidebar-container {
+  animation: sidebarSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes sidebarSlideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// 菜单项点击波纹效果
+.sidebar-container {
+  .el-menu-item,
+  .el-submenu__title {
+    &:active {
+      transform: scale(0.98) !important;
+    }
+  }
+}
+
+// 子菜单展开时的特效
+.el-menu--inline {
+  overflow: hidden;
+  
+  .el-menu-item {
+    transform-origin: left center;
+  }
+}
+
+// 图标组微动画
+.sidebar-container {
+  .svg-icon {
+    transform-origin: center;
+    display: inline-block;
+  }
+
+  // 不同类型图标的特殊效果（仅保留上下弹跳，移除旋转）
+  .el-menu-item:hover {
+    .svg-icon[data-icon*="dashboard"],
+    .svg-icon[data-icon*="home"] {
+      animation: iconBounceY 0.6s ease;
+    }
+  }
+}
+
+@keyframes iconBounceY {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-4px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(-2px); }
+}
+
+// iconSwing 旋转动画已移除
+
+// 菜单激活时的光效
+.el-menu-item.is-active {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+    border-radius: 8px;
+    pointer-events: none;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+// 滚动时的视差效果
+.el-scrollbar__wrap {
+  scroll-behavior: smooth;
+}
+
+// Logo 呼吸灯效果（轻微）
+.sidebar-logo-container {
+  .sidebar-logo {
+    animation: logoBreathing 4s ease-in-out infinite;
+  }
+}
+
+@keyframes logoBreathing {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.02);
+  }
+}
+
+// 展开箭头的流畅过渡
+.el-submenu {
+  .el-submenu__icon-arrow {
+    will-change: transform;
+  }
+
+  &.is-opened {
+    > .el-submenu__title {
+      .el-submenu__icon-arrow {
+        animation: arrowBounce 0.5s ease;
+      }
+    }
+  }
+}
+
+@keyframes arrowBounce {
+  0% { transform: rotate(0deg); }
+  30% { transform: rotate(200deg); }
+  50% { transform: rotate(170deg); }
+  70% { transform: rotate(190deg); }
+  100% { transform: rotate(180deg); }
+}
+
+// 鼠标悬停时的高光效果
+.sidebar-container {
+  .el-menu-item,
+  .el-submenu__title {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+      );
+      transition: left 0.5s ease;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    &:hover::after {
+      left: 100%;
+    }
+  }
+}
+
+// 菜单项加载骨架屏效果（可选）
+@keyframes skeletonLoading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// 激活菜单项的边框发光
+.el-menu-item.is-active {
+  box-shadow: 
+    0 2px 8px rgba(59, 130, 246, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+// 子菜单背景渐变动画
+.theme-dark {
+  .el-submenu .el-menu {
+    background: linear-gradient(
+      180deg,
+      rgba(20, 23, 42, 1) 0%,
+      rgba(20, 23, 42, 0.98) 100%
+    );
+  }
+}
+
+// 鼠标进入菜单区域的提示动画
+.sidebar-container:hover {
+  .el-menu-item,
+  .el-submenu__title {
+    &:not(:hover) {
+      opacity: 0.85;
+    }
+  }
+}
+
+// 平滑过渡优化
+.sidebar-container {
+  * {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+// 激活指示条的脉冲效果
+.el-menu-item.is-active::before {
+  animation: indicatorPulse 2s ease-in-out infinite;
+}
+
+@keyframes indicatorPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.8);
+  }
+}
+
+// 减少动画的性能消耗
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-container * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

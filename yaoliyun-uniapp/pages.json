@@ -1,0 +1,225 @@
+{
+	"pages":[
+		{
+			"path":"pages/login/login",
+			"style":{
+				"navigationBarTitleText":"登录",
+				"navigationBarBackgroundColor":"#ffffff",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path":"pages/index/index",
+			"style":{
+				"navigationBarTitleText":"首页",
+				"navigationBarBackgroundColor":"#ffffff",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path":"pages/garbage/category",
+			"style":{
+				"navigationBarTitleText":"垃圾分类",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/garbage/category-detail",
+			"style":{
+				"navigationBarTitleText":"分类详情",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/garbage/item-detail",
+			"style":{
+				"navigationBarTitleText":"物品详情",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/garbage/search",
+			"style":{
+				"navigationBarTitleText":"垃圾搜索",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/garbage/recognize",
+			"style":{
+				"navigationBarTitleText":"拍照识别",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/garbage/result",
+			"style":{
+				"navigationBarTitleText":"识别结果",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/garbage/record",
+			"style":{
+				"navigationBarTitleText":"识别记录",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/article/list",
+			"style":{
+				"navigationBarTitleText":"知识学习",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/article/detail",
+			"style":{
+				"navigationBarTitleText":"文章详情",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/quiz/index",
+			"style":{
+				"navigationBarTitleText":"分类测验",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/quiz/result",
+			"style":{
+				"navigationBarTitleText":"测验结果",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/message/list",
+			"style":{
+				"navigationBarTitleText":"消息",
+				"navigationBarBackgroundColor":"#ffffff",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path":"pages/user/index",
+			"style":{
+				"navigationBarTitleText":"我的",
+				"navigationBarBackgroundColor":"#ffffff",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path":"pages/message/chat",
+			"style":{
+				"navigationBarTitleText":"聊天",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/message/contacts",
+			"style":{
+				"navigationBarTitleText":"选择联系人",
+				"navigationBarBackgroundColor":"#ffffff"
+			}
+		},
+		{
+			"path":"pages/wechat-login/wechat-login",
+			"style":{
+				"navigationBarTitleText":"微信登录",
+				"navigationBarBackgroundColor":"#ffffff",
+				"navigationStyle": "custom"
+			}
+		},
+		
+		{
+			"path":"pages/register/register",
+			"style":{
+				"navigationBarTitleText":"注册",
+				"navigationBarBackgroundColor":"#ffffff",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/user/edit",
+			"style": {
+				"navigationBarTitleText": "编辑资料"
+			}
+		},
+		{
+			"path": "pages/user/about",
+			"style": {
+				"navigationBarTitleText": "关于我们"
+			}
+		},
+		{
+			"path": "pages/user/change-password",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
+			"path": "pages/ai/chat",
+			"style": {
+				"navigationBarTitleText": "AI助手",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/feedback/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/feedback/history",
+			"style": {
+				"navigationBarTitleText": "我的反馈",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/feedback/detail",
+			"style": {
+				"navigationBarTitleText": "反馈详情",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		}
+	],
+	"globalStyle":{
+		"navigationBarTextStyle":"black",
+		"navigationBarTitleText":"瑶力云",
+		"navigationBarBackgroundColor":"#ffffff",
+		"backgroundColor":"#f8f8f8"
+	},
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#07c160",
+		"backgroundColor": "#ffffff",
+		"borderStyle": "black",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/garbage/search",
+				"text": "搜索"
+			},
+			{
+				"pagePath": "pages/ai/chat",
+				"text": "智能助手"
+			},
+			{
+				"pagePath": "pages/article/list",
+				"text": "学习"
+			},
+			{
+				"pagePath": "pages/user/index",
+				"text": "我的"
+			}
+		]
+	},
+	"uniIdRouter":{}
+}

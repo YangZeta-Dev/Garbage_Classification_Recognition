@@ -1,0 +1,63 @@
+/* AI抽屉模态层修复样式 */
+
+/* 确保AI抽屉的模态层不会造成灰屏问题 */
+.ai-chat-drawer {
+  .v-modal {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    z-index: 1999 !important;
+  }
+  
+  .el-drawer__wrapper {
+    z-index: 2000 !important;
+  }
+}
+
+/* 防止body滚动锁定问题 */
+body.el-popup-parent--hidden {
+  overflow: auto !important;
+  padding-right: 0 !important;
+}
+
+/* 修复可能的z-index冲突 */
+.el-drawer__container {
+  z-index: 2000 !important;
+}
+
+/* 确保抽屉内容可以正常交互 */
+.ai-chat-drawer .el-drawer {
+  pointer-events: auto !important;
+}
+
+.ai-chat-drawer .el-drawer__body {
+  pointer-events: auto !important;
+}
+
+/* 修复输入框焦点问题 */
+.ai-chat-drawer .el-textarea__inner {
+  pointer-events: auto !important;
+  user-select: text !important;
+}
+
+/* 确保按钮可以正常点击 */
+.ai-chat-drawer .el-button {
+  pointer-events: auto !important;
+}
+
+/* 移动端特殊处理 */
+@media (max-width: 768px) {
+  .ai-chat-drawer .v-modal {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+}
+
+/* 修复可能的滚动条问题 */
+.ai-chat-drawer .chat-messages {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 确保关闭按钮可见和可点击 */
+.ai-chat-drawer .el-drawer__close-btn {
+  z-index: 2001 !important;
+  pointer-events: auto !important;
+}

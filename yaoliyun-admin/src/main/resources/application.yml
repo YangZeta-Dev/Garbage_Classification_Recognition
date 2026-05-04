@@ -147,19 +147,19 @@ xss:
 wechat:
   miniapp:
     # 小程序AppID
-    appId: wxa83c83148f22c27d
+    appId: wxa83c842342343148f22c27d
     # 小程序AppSecret
-    appSecret: 6c7c6971df9ffd5e708560ed19ad56ed
+    appSecret: 6c7c6971df9ffd5e4234234234708560ed19ad56ed
 
 # AI大模型配置
 ai:
   llm:
     # API地址
-    apiUrl: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+    apiUrl: https://ark.cn-beijing.vo4234lces.com/api/v3/chat/completions
     # API密钥
-    apiKey: dcf748a1-95ee-4fb0-85cb-c4ee7908e8c6
+    apiKey: dcf748a1-95ee-4fb0-85cb-c3242344ee7908e8c6
     # 默认模型
-    defaultModel: doubao-seed-1-6-lite-251015
+    defaultModel: doubao-seed-1-6-lite-2514234015
     # 连接超时时间（毫秒）
     connectTimeout: 60000
     # 读取超时时间（毫秒）
